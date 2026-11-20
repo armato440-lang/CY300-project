@@ -67,6 +67,15 @@ def start_music(filename):
     except (pygame.error, FileNotFoundError):
         print("Could not load music: " + path)
         return False
+def load_sound(filename, volume=0.5):
+    path = os.path.join(ASSET_DIR, filename)
+
+    try:
+        sound = pygame.mixer.Sound(path)
+        sound.set_volume(volume)
+        return sound
+    except (pygame.error, FileNotFoundError):
+        return None
 # ---------------------------------------------------------
 # PLAYER
 # ---------------------------------------------------------
@@ -474,7 +483,12 @@ def main():
         screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("Zombie Apocolypse!!")
 
-images = load_all_images()   # add this line
+        images = load_all_images()  
+        start_music("music.ogg")
+        muted = False
+        shoot_sound = load_sound("shoot.wav")
+        if shoot_sound:
+            shoot_sound.play()
 
         # -------------------------------------------------
         # EVENTS
@@ -496,9 +510,11 @@ images = load_all_images()   # add this line
                         mouse_x,
                         mouse_y
                     )
-
                     if bullet is not None:
                         bullets.append(bullet)
+                    shoot_sound = True 
+                    shoot_sound = False
+                    
 
         # -------------------------------------------------
         # ACTIVE GAME
