@@ -20,13 +20,14 @@ STARTING_HEALTH = 3
 MAX_HEALTH = 3
 
 BULLET_SIZE = 5
+MUSIC_VOLUME = 0.3
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ASSET_DIR = os.path.join(BASE_DIR, "assets")
 
 #---------------------------------------------------
-# IMAGE LOADING
+# IMAGE AND MUSIC LOADING
 #---------------------------------------------------
 
 def load_image(filename, size):
@@ -53,6 +54,19 @@ def load_all_images():
     }
 
     return images
+def start_music(filename):
+    """Load and loop background music. Returns True if it started."""
+
+    path = os.path.join(ASSET_DIR, filename)
+
+    try:
+        pygame.mixer.music.load(path)
+        pygame.mixer.music.set_volume(MUSIC_VOLUME)
+        pygame.mixer.music.play(-1)   # -1 means loop forever
+        return True
+    except (pygame.error, FileNotFoundError):
+        print("Could not load music: " + path)
+        return False
 # ---------------------------------------------------------
 # PLAYER
 # ---------------------------------------------------------
