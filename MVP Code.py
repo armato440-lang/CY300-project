@@ -454,6 +454,13 @@ def main():
     powerup_timer = 0
 
     while running:
+        #----------------------------------------------
+        # IMPLEMENT IMAGES
+        #-----------------------------------------------
+        screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Zombie Apocolypse!!")
+
+images = load_all_images()   # add this line
 
         # -------------------------------------------------
         # EVENTS
