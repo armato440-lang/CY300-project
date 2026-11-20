@@ -1,7 +1,7 @@
 import pygame
 import random
 import math
-
+import os
 
 # ---------------------------------------------------------
 # GAME SETTINGS
@@ -20,6 +20,39 @@ STARTING_HEALTH = 3
 MAX_HEALTH = 3
 
 BULLET_SIZE = 5
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ASSET_DIR = os.path.join(BASE_DIR, "assets")
+
+#---------------------------------------------------
+# IMAGE LOADING
+#---------------------------------------------------
+
+def load_image(filename, size):
+    """Load an image, scale it to size, and return it.
+    Returns None if the file can't be loaded."""
+
+    path = os.path.join(ASSET_DIR, filename)
+
+    try:
+        image = pygame.image.load(path).convert_alpha()
+        return pygame.transform.smoothscale(image, size)
+    except (pygame.error, FileNotFoundError):
+        print("Could not load " + path + ", using shapes instead.")
+        return None
+
+
+def load_all_images():
+    """Load every image the game uses."""
+
+    images = {
+        "player": load_image("player.png", (PLAYER_SIZE * 2, PLAYER_SIZE * 2)),
+        "zombie": load_image("zombie.png", (ZOMBIE_SIZE * 2, ZOMBIE_SIZE * 2)),
+        "health": load_image("health.png", (30, 30)),
+    }
+
+    return images
 # ---------------------------------------------------------
 # PLAYER
 # ---------------------------------------------------------
