@@ -1,1 +1,5 @@
-
+zombie_game.py
+assets/
+    player.png
+    zombie.png
+    health.png
