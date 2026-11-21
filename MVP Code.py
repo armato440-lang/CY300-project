@@ -78,6 +78,7 @@ def load_sound(filename, volume=0.5):
         return sound
     except (pygame.error, FileNotFoundError):
         return None
+
 # ---------------------------------------------------------
 # PLAYER
 # ---------------------------------------------------------
