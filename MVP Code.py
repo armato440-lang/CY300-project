@@ -19,6 +19,8 @@ ZOMBIE_SIZE = 30
 STARTING_HEALTH = 3
 MAX_HEALTH = 3
 
+BULLET_SIZE = 5
+
 
 # ---------------------------------------------------------
 # PLAYER
@@ -169,6 +171,7 @@ def check_bullet_hits(bullets, zombies):
     """Check whether bullets hit zombies."""
 
     score_increase = 0
+    hit_distance = ZOMBIE_SIZE + BULLET_SIZE
 
     for bullet in bullets[:]:
 
@@ -179,7 +182,7 @@ def check_bullet_hits(bullets, zombies):
                 + (bullet["y"] - zombie["y"]) ** 2
             )
 
-            if distance < 25:
+            if distance < hit_distance:
 
                 if bullet in bullets:
                     bullets.remove(bullet)
