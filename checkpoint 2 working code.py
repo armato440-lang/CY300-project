@@ -26,7 +26,8 @@ MUSIC_VOLUME = 0.3
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-ASSET_DIR = os.path.join(BASE_DIR, "assets")
+IMAGE_DIR = os.path.join(BASE_DIR, "assets", "images")
+SOUND_DIR = os.path.join(BASE_DIR, "assets", "sounds")
 
 #---------------------------------------------------
 # IMAGE AND MUSIC LOADING
@@ -36,7 +37,7 @@ def load_image(filename, size):
     """Load an image, scale it to size, and return it.
     Returns None if the file can't be loaded."""
 
-    path = os.path.join(ASSET_DIR, filename)
+    path = os.path.join(IMAGE_DIR, filename)
 
     try:
         image = pygame.image.load(path).convert_alpha()
@@ -59,7 +60,7 @@ def load_all_images():
 def start_music(filename):
     """Load and loop background music. Returns True if it started."""
 
-    path = os.path.join(ASSET_DIR, filename)
+    path = os.path.join(SOUND_DIR, filename)
 
     try:
         pygame.mixer.music.load(path)
@@ -69,8 +70,9 @@ def start_music(filename):
     except (pygame.error, FileNotFoundError):
         print("Could not load music: " + path)
         return False
+    
 def load_sound(filename, volume=0.5):
-    path = os.path.join(ASSET_DIR, filename)
+    path = os.path.join(SOUND_DIR, filename)
 
     try:
         sound = pygame.mixer.Sound(path)
