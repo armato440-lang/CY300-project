@@ -1,7 +1,7 @@
 import pygame
 import random
 import math
-
+import os
 
 # ---------------------------------------------------------
 # GAME SETTINGS
@@ -21,7 +21,63 @@ MAX_HEALTH = 3
 
 BULLET_SIZE = 5
 
+BULLET_SIZE = 5
+MUSIC_VOLUME = 0.3
 
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ASSET_DIR = os.path.join(BASE_DIR, "assets")
+
+#---------------------------------------------------
+# IMAGE AND MUSIC LOADING
+#---------------------------------------------------
+
+def load_image(filename, size):
+    """Load an image, scale it to size, and return it.
+    Returns None if the file can't be loaded."""
+
+    path = os.path.join(ASSET_DIR, filename)
+
+    try:
+        image = pygame.image.load(path).convert_alpha()
+        return pygame.transform.smoothscale(image, size)
+    except (pygame.error, FileNotFoundError):
+        print("Could not load " + path + ", using shapes instead.")
+        return None
+
+
+def load_all_images():
+    """Load every image the game uses."""
+
+    images = {
+        "player": load_image("player.png", (PLAYER_SIZE * 2, PLAYER_SIZE * 2)),
+        "zombie": load_image("zombie.png", (ZOMBIE_SIZE * 2, ZOMBIE_SIZE * 2)),
+        "health": load_image("health.png", (30, 30)),
+    }
+
+    return images
+def start_music(filename):
+    """Load and loop background music. Returns True if it started."""
+
+    path = os.path.join(ASSET_DIR, filename)
+
+    try:
+        pygame.mixer.music.load(path)
+        pygame.mixer.music.set_volume(MUSIC_VOLUME)
+        pygame.mixer.music.play(-1)   # -1 means loop forever
+        return True
+    except (pygame.error, FileNotFoundError):
+        print("Could not load music: " + path)
+        return False
+def load_sound(filename, volume=0.5):
+    path = os.path.join(ASSET_DIR, filename)
+
+    try:
+        sound = pygame.mixer.Sound(path)
+        sound.set_volume(volume)
+        return sound
+    except (pygame.error, FileNotFoundError):
+        return None
 # ---------------------------------------------------------
 # PLAYER
 # ---------------------------------------------------------
@@ -423,6 +479,18 @@ def main():
     powerup_timer = 0
 
     while running:
+        #----------------------------------------------
+        # IMPLEMENT IMAGES
+        #-----------------------------------------------
+        screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Zombie Apocolypse!!")
+
+        images = load_all_images()  
+        start_music("music.ogg")
+        muted = False
+        shoot_sound = load_sound("shoot.wav")
+        if shoot_sound:
+            shoot_sound.play()
 
         # -------------------------------------------------
         # EVENTS
@@ -444,9 +512,11 @@ def main():
                         mouse_x,
                         mouse_y
                     )
-
                     if bullet is not None:
                         bullets.append(bullet)
+                    shoot_sound = True 
+                    shoot_sound = False
+                    
 
         # -------------------------------------------------
         # ACTIVE GAME
