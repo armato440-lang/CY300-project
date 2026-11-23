@@ -36,9 +36,49 @@ def test_all_images_load():
     for name in ("player", "zombie", "health"):
         assert images[name] is not None, name + " image failed to load"
 
-
 def test_image_sizes():
     images = game.load_all_images()
 
     assert images["player"].get_size() == (game.PLAYER_SIZE * 2, game.PLAYER_SIZE * 2)
     assert images["zombie"].get_size() == (game.ZOMBIE_SIZE * 2, game.ZOMBIE_SIZE * 2)
+"""
+Test Case 2: Testing for Music Loading
+"""
+import os
+
+# Must be set before pygame initializes anything
+os.environ["SDL_VIDEODRIVER"] = "dummy"
+os.environ["SDL_AUDIODRIVER"] = "dummy"
+
+import pygame
+import pytest
+
+
+@pytest.fixture(scope="session", autouse=True)
+def pygame_session():
+    pygame.init()
+    pygame.display.set_mode((1, 1))
+    yield
+    pygame.quit()
+
+
+@pytest.fixture(autouse=True)
+def silence_after_each_test():
+    """Stop anything still playing so tests don't affect each other."""
+    yield
+    pygame.mixer.music.stop()
+    pygame.mixer.stop()
+def fire_bullet(player, mouse_pos, bullets, shoot_sound=None):
+    """Create a bullet and play the shot sound. Returns True if fired."""
+
+    bullet = shoot(player, mouse_pos[0], mouse_pos[1])
+
+    if bullet is None:
+        return False
+
+    bullets.append(bullet)
+
+    if shoot_sound:
+        shoot_sound.play()
+
+    return True
