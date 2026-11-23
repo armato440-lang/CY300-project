@@ -41,7 +41,7 @@ ANIMATION_DELAY = 130  # milliseconds between walking frames
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 IMAGE_DIR = os.path.join(BASE_DIR, "assets", "images")
 SOUND_DIR = os.path.join(BASE_DIR, "assets", "sounds")
-
+MUSIC_DIR = os.path.join(BASE_DIR, "assets", "music")
 
 # ---------------------------------------------------------
 # ASSET LOADING
@@ -70,6 +70,23 @@ def load_sound(filename, volume=SOUND_VOLUME):
     except (pygame.error, FileNotFoundError) as error:
         print("Sound could not be loaded:", path, "-", error)
         return None
+
+
+def play_background_music():
+
+    music_path = os.path.join(MUSIC_DIR, "background.mp3")
+
+    try:
+        pygame.mixer.music.load(music_path)
+        pygame.mixer.music.set_volume(0.25)
+
+        # -1 makes the music loop continuously
+        pygame.mixer.music.play(-1)
+
+        print("Background music is playing!")
+
+    except pygame.error as error:
+        print("Music loading error:", error)
 
 
 def load_all_assets():
@@ -432,6 +449,9 @@ def main():
     except pygame.error as error:
         print("Audio is unavailable:", error)
         audio_available = False
+
+    if audio_available:
+        play_background_music()
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Zombie Apocalypse - Checkpoint 2")
