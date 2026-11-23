@@ -10,7 +10,7 @@ os.environ["SDL_AUDIODRIVER"] = "dummy"
 import pygame
 import pytest
 
-import checkpoint 2 working code. py as game
+import Checkpoint_2. py as game
 
 REQUIRED_IMAGES = ["player.png", "zombie.png", "health.png"]
 
