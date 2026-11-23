@@ -1,1 +1,44 @@
+"""
+Test Case 1: Validating Images Load
+"""
 
+import os
+
+os.environ["SDL_VIDEODRIVER"] = "dummy"
+os.environ["SDL_AUDIODRIVER"] = "dummy"
+
+import pygame
+import pytest
+
+import checkpoint 2 working code. py as game
+
+REQUIRED_IMAGES = ["player.png", "zombie.png", "health.png"]
+
+
+@pytest.fixture(scope="module", autouse=True)
+def pygame_display():
+    """convert_alpha() needs a display, so make a tiny hidden one."""
+    pygame.init()
+    pygame.display.set_mode((1, 1))
+    yield
+    pygame.quit()
+
+
+@pytest.mark.parametrize("filename", REQUIRED_IMAGES)
+def test_image_file_exists(filename):
+    path = os.path.join(game.ASSET_DIR, filename)
+    assert os.path.isfile(path), "Missing image file: " + path
+
+
+def test_all_images_load():
+    images = game.load_all_images()
+
+    for name in ("player", "zombie", "health"):
+        assert images[name] is not None, name + " image failed to load"
+
+
+def test_image_sizes():
+    images = game.load_all_images()
+
+    assert images["player"].get_size() == (game.PLAYER_SIZE * 2, game.PLAYER_SIZE * 2)
+    assert images["zombie"].get_size() == (game.ZOMBIE_SIZE * 2, game.ZOMBIE_SIZE * 2)
